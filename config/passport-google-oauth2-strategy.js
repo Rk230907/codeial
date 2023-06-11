@@ -11,29 +11,62 @@ passport.use(new googleStrategy({
         callbackURL: "http://localhost:8000/users/auth/google/callback",
     },
 
+
     function(accessToken, refreshToken, profile, done) {
-        // Find a user
-        User.findOne({ email: profile.emails[0].value })
-          .exec()
-          .then(user => {
-            console.log(profile);
-            if (user) {
-              // If found, set this user as req.user
-              return done(null, user);
-            } else {
-              // If not found, create this user and set it as req.user
-              return User.create({
-                name: profile.displayName,
-                email: profile.emails[0].value,
-                password: crypto.randomBytes(20).toString('hex')
+      // Find a user
+      User.findOne({ email: profile.emails[0].value })
+        .exec()
+        .then(user => {
+          console.log(profile);
+          if (user) {
+            // If found, set this user as req.user
+            return done(null, user);
+          } else {
+            // If not found, create this user and set it as req.user
+            User.create({
+              name: profile.displayName,
+              email: profile.emails[0].value,
+              password: crypto.randomBytes(20).toString('hex')
+            })
+              .then(newUser => {
+                return done(null, newUser);
+              })
+              .catch(createError => {
+                console.log('Error creating user:', createError);
+                return done(createError);
               });
-            }
-          })
-            .catch(err => {
-            console.log('Error in google strategy passport', err);
-            return done(err);
-          });
-      }
+          }
+        })
+        .catch(findError => {
+          console.log('Error in Google strategy Passport:', findError);
+          return done(findError);
+        });
+    }
+    
+
+    // function(accessToken, refreshToken, profile, done) {
+    //     // Find a user
+    //     User.findOne({ email: profile.emails[0].value })
+    //       .exec()
+    //       .then(user => {
+    //         console.log(profile);
+    //         if (user) {
+    //           // If found, set this user as req.user
+    //           return done(null, user);
+    //         } else {
+    //           // If not found, create this user and set it as req.user
+    //             return User.create({
+    //             name: profile.displayName,
+    //             email: profile.emails[0].value,
+    //             password: crypto.randomBytes(20).toString('hex')
+    //           });
+    //         }
+    //       })
+    //         .catch(err => {
+    //         console.log('Error in google strategy passport', err);
+    //         return done(err);
+    //       });
+    //   }
 ));      
 
 

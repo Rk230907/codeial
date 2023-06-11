@@ -22,6 +22,7 @@
     "flash": "^1.1.0",
     "mongoose": "^7.2.2",
     "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.3",
     "nodemon": "^2.0.22",
     "noty": "^3.2.0-beta-deprecated",
     "passport": "^0.6.0",
