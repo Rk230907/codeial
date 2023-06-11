@@ -2,14 +2,33 @@ const Post = require('../models/post');
 const Comment = require('../models/comment');
 const postsMailer = require('../mailers/posts-mailer');
 
+
 module.exports.create = async function(req, res){
     try{
         let post = await Post.create({
             content: req.body.content,
             user: req.user._id
         });
+        
         post = await post.populate('user', 'name email');
+        
+        
+        // Initiate email without queue
         postsMailer.newPost(post);
+
+
+         // Using queue send emails. 
+        //  let job = queue.create('emails', post).save(function(err){
+        //     if(err){
+        //         console.log('Error in creating a queue');
+        //         return;
+        //     }
+
+        //      console.log('Job enqueued',job.id);
+   
+        // });  
+
+
         if (req.xhr){
             // post = await post.populate('user', 'name');
             
