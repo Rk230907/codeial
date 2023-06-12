@@ -39,19 +39,20 @@ module.exports.toggleLike = async function(req, res){
                 onModel: req.query.type
             });
 
-            likeable.likes.push(like._id);
+            likeable.likes.push(newLike._id);
             likeable.save();
         }
-        return res.json(200,{
+        return res.status(200).json({
             message: "Request Successful!",
-            data:{
-                deleted: deleted
+            data: {
+              deleted: deleted
             }
-        })
+          });
+          
 
     }catch(err){
         console.log(err);
-        return res.json(500, {
+        return res.status(500).json( {
             message: 'Internal Server Error'
         });
     }
