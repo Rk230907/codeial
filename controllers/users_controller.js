@@ -2,6 +2,10 @@ const User = require('../models/user');
 const fs = require('fs');
 const path = require('path');
 const { promisify } = require('util');
+const nodemailer = require('nodemailer');
+const ejs = require('ejs');
+const resetPwdMailer = require('../mailers/forgot-pwd-mailer');
+
 
 // promisify User.findById
 const findById = promisify(User.findById).bind(User);
@@ -128,3 +132,116 @@ module.exports.destroySession = function(req, res) {
     });
   };
   
+
+  module.exports.forgotPwd = async (req, res) => {
+    console.log('Sending mail');
+    const { email } = req.body;
+  
+    try {
+      const user = await User.findOne({ email });
+  
+      if (!user) {
+        req.flash('error','Email does not exist. Please sign up!!')
+        // console.log('inside flash');
+        return res.render('user_sign_in', { error: 'Email not found' });
+
+      }
+  
+      const token = generateToken();
+      console.log(token);
+      user.resetToken = token;
+      user.resetTokenExpiration = Date.now() + 3600000; // 1 hour
+      await user.save();
+  
+      // let transporter = nodemailer.createTransport({
+      //   service: 'gmail',
+      //   host: 'smtp.gmail.com',
+      //   port: 587,
+      //   secure: false,
+      //   auth:{
+      //       user: 'development.ypatel@gmail.com',
+      //       pass: 'pbbcvdbcaywhqfwp'
+      //   }
+      // });
+  
+      // transporter.sendMail({
+      //   from: 'development.ypatel@gmail.com',
+      //   to: user.email, 
+      //   subject: "Your password reset link",
+      //   text: `Click the following link to reset your password: http://localhost:8000/reset/password/${token}?email=${email}`
+      // }, (err, info) => {
+      //   if (err) {
+      //     console.log('Error in sending mail', err);
+      //     return;
+      //   }
+      //   console.log('Mail delivered', info);
+      //   return;
+      // });
+
+      resetPwdMailer.resetPwd(user, token, email);
+  
+      res.render('user_sign_in', { success: 'Reset link sent to your email' });
+    } catch (error) {
+      console.log(error);
+      res.render('user_sign_in', { error: 'Something went wrong' });
+    }
+  };
+  
+  // Generate a random token
+  function generateToken() {
+    const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const length = 32;
+    let token = '';
+  
+    for (let i = 0; i < length; i++) {
+      token += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+  
+    return token;
+  };
+
+
+  module.exports.resetPassword = async function(req, res) {
+    const { email, password, confirm_password, token } = req.body;
+  
+    try {
+      const user = await User.findOne({ email });
+  
+      if (!user) {
+        req.flash('error', 'Email not found');
+        return res.redirect('back');
+      }
+  
+      if (user.resetToken !== token || user.resetTokenExpiration < Date.now()) {
+        req.flash('error', 'Invalid or expired reset token');
+        return res.redirect('back');
+      }
+  
+      if (password !== confirm_password) {
+        req.flash('error', 'Passwords do not match');
+        return res.redirect('back');
+      }
+  
+      user.password = password;
+      user.resetToken = undefined;
+      user.resetTokenExpiration = undefined;
+      await user.save();
+  
+      req.flash('success', 'Password reset successfully');
+      return res.redirect('/users/sign-in');
+    } catch (error) {
+      console.error(error);
+      req.flash('error', 'Something went wrong');
+      return res.redirect('back');
+    }
+  }
+
+  module.exports.renderResetPassword = function(req, res) {
+    const token = req.params.token;
+    const { email } = req.query;
+    // Resolve the file path to the "reset_password" template file
+    const filePath = path.join(__dirname, '../views/reset_password.ejs');
+    // You can pass the token to the reset password page template if needed
+
+    res.render(filePath, { token, email});
+  };

@@ -11,6 +11,10 @@ router.use('/users', require('./users'));
 router.use('/posts', require('./posts'));
 router.use('/comments', require('./comments'));
 router.use('/likes', require('./likes'));
+// router.use('/forgot', require('./users'));
+router.use('/reset', require('./users'));
+// router.use('/reset', require('./users'));
+
 
 
 router.use('/api', require('./api'));
