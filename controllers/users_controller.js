@@ -89,7 +89,7 @@ module.exports.signIn = function(req, res){
     }
     return res.render('user_sign_in', {
         title: "Codeial | Sign In"
-    })
+    });
 }
 
 // get the sign up data
@@ -143,7 +143,7 @@ module.exports.destroySession = function(req, res) {
       if (!user) {
         req.flash('error','Email does not exist. Please sign up!!')
         // console.log('inside flash');
-        return res.render('user_sign_in', { error: 'Email not found' });
+        return res.render('user_sign_in',  { error: 'Email not found', title: "Codeial | Sign In"});
 
       }
   
@@ -180,10 +180,10 @@ module.exports.destroySession = function(req, res) {
 
       resetPwdMailer.resetPwd(user, token, email);
   
-      res.render('user_sign_in', { success: 'Reset link sent to your email' });
+      res.render('user_sign_in', { success: 'Reset link sent to your email' , title: "Codeial | Sign In" });
     } catch (error) {
       console.log(error);
-      res.render('user_sign_in', { error: 'Something went wrong' });
+      res.render('user_sign_in', { error: 'Something went wrong' , title: "Codeial | Sign In" });
     }
   };
   
@@ -243,5 +243,5 @@ module.exports.destroySession = function(req, res) {
     const filePath = path.join(__dirname, '../views/reset_password.ejs');
     // You can pass the token to the reset password page template if needed
 
-    res.render(filePath, { token, email});
+    res.render(filePath, { token, email , title: "Codeial | Reset Password"});
   };
