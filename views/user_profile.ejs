@@ -14,8 +14,68 @@
         <input type="submit"  value="Update">
     </form>
     
+    
 <%}else{%>    
     <!-- else show only the profile info -->
     <p><%= profile_user.name %></p>
     <p><%= profile_user.email %></p>
+    <form id="addFriendForm" action="/friends/add" method="post">
+        <input type="hidden" name="friendId" value="<%= profile_user.id %>">
+        <input type="submit" value="Add Friend">
+    </form>
+
+    
+    <script>
+        // Get the form element
+        const addFriendForm = document.getElementById('addFriendForm');
+      
+        // Add event listener for form submission
+        addFriendForm.addEventListener('submit', function(event) {
+          event.preventDefault(); // Prevent default form submission
+      
+          // Create a new XMLHttpRequest object
+          const xhr = new XMLHttpRequest();
+      
+          // Configure the request
+          xhr.open('POST', addFriendForm.action);
+          xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      
+          // Handle the response
+          xhr.onload = function() {
+            if (xhr.status === 200) {
+              // Request was successful
+              const response = JSON.parse(xhr.responseText);
+              if (response.message) {
+                // Display success message
+                console.log(response.message);
+                new Noty({
+                        theme: 'relax',
+                        text: response.message,
+                        type: 'success',
+                        layout: 'topRight',
+                        timeout: 1500
+                        
+                    }).show();
+              }
+              // Optionally, you can update the UI or perform other actions based on the response
+            } else {
+              // Request failed
+              console.log('Error: ' + xhr.statusText);
+            }
+          };
+      
+          // Send the request
+          xhr.send(new URLSearchParams(new FormData(addFriendForm)));
+        });
+      </script>
+      
+      
+    
+    
+
+    <!-- <form action="/friends/remove" method="post">
+        <input type="text" name="friendId" value="<%= profile_user.id %>">
+        <input type="submit" value="Remove Friend">
+    </form> -->
+
 <%} %>
