@@ -22,6 +22,7 @@ router.post('/create-session', passport.authenticate(
 router.post('/forgot-password', usersController.forgotPwd);
 router.get('/password/:token', usersController.renderResetPassword);
 router.post('/password', usersController.resetPassword);
+router.post('/add', usersController.addFriend);
 
 
 
