@@ -26,7 +26,7 @@ const chatSockets = require('./config/chat_sockets').chatSockets(chatServer);
 
 
 
-chatServer.listen(5000, ()=>{
+chatServer.listen(5001, ()=>{
     console.log('Chat Server is listening on port 5000');
 });
 
