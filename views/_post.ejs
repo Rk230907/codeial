@@ -1,57 +1,164 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+<style>
+    /* Additional CSS styles for an extraordinary look */
+    #post-<%= post._id %> {
+        background-color: #f9f9f9;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        /* Add your own custom styles here */
+    }
+
+    #post-<%= post._id %> p {
+        margin: 0;
+        padding-bottom: 10px;
+        /* Add your own custom styles here */
+    }
+
+    #post-<%= post._id %> small {
+        font-size: 12px;
+        color: #888;
+        /* Add your own custom styles here */
+    }
+
+    #post-<%= post._id %> a.delete-post-button {
+        color: #f00;
+        text-decoration: none;
+        font-size: 12px;
+        margin-left: 10px; /* Add spacing between content and delete button */
+        /* Add your own custom styles here */
+    }
+
+    #post-<%= post._id %> a.toggle-like-button {
+        color: #00f;
+        text-decoration: none;
+        font-size: 12px;
+        margin-left: 10px; /* Add spacing between content and like button */
+        /* Add your own custom styles here */
+    }
+
+    #post-<%= post._id %> .post-comments {
+        margin-top: 10px;
+        /* Add your own custom styles here */
+    }
+
+    #post-<%= post._id %> form {
+        margin-bottom: 10px;
+        /* Add your own custom styles here */
+    }
+
+    #post-<%= post._id %> form input[type="text"],
+    #post-<%= post._id %> form input[type="submit"] {
+        margin-bottom: 10px; /* Add space between the input elements */
+    }
+
+    #post-<%= post._id %> input[type="text"] {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+        /* Add your own custom styles here */
+    }
+
+    #post-<%= post._id %> input[type="submit"] {
+        background-color: #4caf50;
+        color: #fff;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        /* Add your own custom styles here */
+    }
+
+    #post-<%= post._id %> .post-comments-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        /* Add your own custom styles here */
+    }
+
+    #post-<%= post._id %> .comment-item {
+        margin-bottom: 10px;
+        /* Add your own custom styles here */
+    }
+
+    /* Additional styling for the like and delete buttons */
+    #post-<%= post._id %> .toggle-like-button {
+        /* Add your own custom styles here */
+        /* Example: Change the appearance of the like button */
+        padding: 4px 8px;
+        border: 1px solid #00f;
+        border-radius: 3px;
+        background-color: #fff;
+        transition: background-color 0.3s ease;
+        
+    }
+
+    #post-<%= post._id %> .toggle-like-button:hover {
+        background-color: #00f;
+        color: #fff;
+    }
+
+    #post-<%= post._id %> .delete-post-button {
+        /* Add your own custom styles here */
+        /* Example: Add Font Awesome icon to the delete button */
+        padding: 4px;
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+        m
+    }
+</style>
+
 <li id="post-<%= post._id %>">
     <p>
         <% if (locals.user && locals.user.id == post.user.id){ %>
         <small>
-            <a class="delete-post-button"  href="/posts/destroy/<%= post.id %>">X</a>
+            <a class="delete-post-button" href="/posts/destroy/<%= post.id %>"><i class="fas fa-trash-alt"></i></a>
         </small>
         <% } %>
-        <%= post.content %>
+        <span>
+            <%= post.content %>
+        </span>
+       
         <br>
-        <small>
-            <%= post.user.name %>
+        <small style="margin-left: 20px;">
+            👤 Creator - <%= post.user.name %>
         </small>
+        <br>
 
         <!-- Display the likes of this post, if the user is logged in, then show the link to toggle likes, else, show the count -->
         <br>
         <!-- Study about data attribute -->
         <small>
-            <%if(locals.user){ %>
-                <a class="toggle-like-button" data-likes="<%= post.likes.length %>" href="/likes/toggle/?id=<%=post._id%>&type=Post">
-                    <%= post.likes.length %> Likes
+            <% if (locals.user){ %>
+                <a class="toggle-like-button" data-likes="<%= post.likes.length %>" href="/likes/toggle/?id=<%= post._id %>&type=Post">
+                    <i class="fas fa-thumbs-up"></i><%= post.likes.length %> Likes
                 </a>
-            <%} else {%>
-                <%= post.likes.length %> Likes
-            <%}%>
-
+            <% } else { %>
+                <i class="fas fa-thumbs-up"></i><%= post.likes.length %> Likes
+            <% } %>
         </small>
-
-
-
-
-
-
     </p>
     <div class="post-comments">
         <% if (locals.user){ %>
             <!-- let's give an id to the new comment form, we'll also need to make the same changes in home_posts.js where we're adding a post to the page -->
             <form id="post-<%= post._id %>-comments-form" action="/comments/create" method="POST">
                 <input type="text" name="content" placeholder="Type Here to add comment..." required>
-                <input type="hidden" name="post" value="<%= post._id %>" >
+                <input type="hidden" name="post" value="<%= post._id %>">
                 <input type="submit" value="Add Comment">
             </form>
-
         <% } %>
-
         <div class="post-comments-list">
             <ul id="post-comments-<%= post._id %>">
-                <% for (comment of post.comments){%>
-
+                <% for (comment of post.comments){ %>
                     <%- include('_comment') -%>
-                    
-                
-                <%} %>
+                <% } %>
             </ul>
         </div>
     </div>
-    
 </li>

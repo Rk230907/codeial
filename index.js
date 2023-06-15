@@ -1,6 +1,15 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const app = express();
+
+// app.use((req, res, next) => {
+//     res.header('Access-Control-Allow-Origin', '*'); // Update with specific origins if needed
+//     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+//     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+//     next();
+//   });
+
+
 const port = 8000;
 const expressLayouts = require('express-ejs-layouts');
 const db = require('./config/mongoose');
@@ -10,6 +19,18 @@ const passport = require('passport');
 const passportLocal = require('./config/passport-local-strategy');
 const passportJWT = require('./config/passport-jwt-strategy');
 const passportGoogle = require('./config/passport-google-oauth2-strategy');
+
+// Setup the chat Server to be used with socket.io
+const chatServer = require('http').Server(app);
+const chatSockets = require('./config/chat_sockets').chatSockets(chatServer);
+
+
+
+chatServer.listen(5000, ()=>{
+    console.log('Chat Server is listening on port 5000');
+});
+
+
 
 const MongoStore = require('connect-mongo');
 // const sassMiddleware = require('node-sass-middleware');

@@ -32,6 +32,7 @@
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
-    "sass-middleware": "^0.0.3"
+    "sass-middleware": "^0.0.3",
+    "socket.io": "^4.6.2"
   }
 }

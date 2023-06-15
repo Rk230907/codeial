@@ -17,9 +17,11 @@ const unlinkSync = promisify(fs.unlinkSync);
 module.exports.profile = function(req, res) {
     User.findById(req.params.id)
       .then(user => {
+        
         return res.render('user_profile', {
           title: 'User Profile',
-          profile_user: user
+          profile_user: user,
+
         });
       })
       .catch(err => {
@@ -152,34 +154,9 @@ module.exports.destroySession = function(req, res) {
       user.resetToken = token;
       user.resetTokenExpiration = Date.now() + 3600000; // 1 hour
       await user.save();
-  
-      // let transporter = nodemailer.createTransport({
-      //   service: 'gmail',
-      //   host: 'smtp.gmail.com',
-      //   port: 587,
-      //   secure: false,
-      //   auth:{
-      //       user: 'development.ypatel@gmail.com',
-      //       pass: 'pbbcvdbcaywhqfwp'
-      //   }
-      // });
-  
-      // transporter.sendMail({
-      //   from: 'development.ypatel@gmail.com',
-      //   to: user.email, 
-      //   subject: "Your password reset link",
-      //   text: `Click the following link to reset your password: http://localhost:8000/reset/password/${token}?email=${email}`
-      // }, (err, info) => {
-      //   if (err) {
-      //     console.log('Error in sending mail', err);
-      //     return;
-      //   }
-      //   console.log('Mail delivered', info);
-      //   return;
-      // });
 
       resetPwdMailer.resetPwd(user, token, email);
-  
+      
       res.render('user_sign_in', { success: 'Reset link sent to your email' , title: "Codeial | Sign In" });
     } catch (error) {
       console.log(error);
@@ -266,8 +243,8 @@ module.exports.destroySession = function(req, res) {
         // Remove the friendship
         await existingFriendship.deleteOne();
         // Update the friendships in both arrays
-        user.friendships.pull(existingFriendship);
-        friend.friendships.pull(existingFriendship);
+        user.friendships.pull(friend._id);
+
   
         // Remove reverse friendship from the other user
         const reverseFriendship = await Friendship.findOne({
@@ -275,12 +252,12 @@ module.exports.destroySession = function(req, res) {
           to_user: user._id,
         });
         await reverseFriendship.deleteOne();
-        friend.friendships.pull(reverseFriendship);
+        friend.friendships.pull(user._id);
   
         await user.save();
         await friend.save();
   
-        return res.status(200).json({ message: 'Unfriend Successful' });
+        return res.status(200).json({ message: 'Unfriend Successful', isFriend: false });
       }
   
       const newFriendship = new Friendship({
@@ -291,8 +268,7 @@ module.exports.destroySession = function(req, res) {
       await newFriendship.save();
   
       // Update the friendships array for both users
-      user.friendships.push(newFriendship);
-      friend.friendships.push(newFriendship);
+      user.friendships.push(friend._id);
   
       // Add reverse friendship for the other user
       const reverseFriendship = new Friendship({
@@ -300,17 +276,23 @@ module.exports.destroySession = function(req, res) {
         to_user: user._id,
       });
       await reverseFriendship.save();
-      friend.friendships.push(reverseFriendship);
+  
+      friend.friendships.push(user._id);
   
       await user.save();
       await friend.save();
+  
+      // Populate the friend's information
       
-      return res.status(200).json({ message: 'Friendship created' });
+      await newFriendship.populate('to_user');
+  
+      return res.status(200).json({ message: 'Friendship created', isFriend: true });
     } catch (err) {
       console.error(err);
       return res.status(500).json({ error: 'Internal server error' });
     }
   };
+  
   
 
 
