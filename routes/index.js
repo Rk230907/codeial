@@ -14,9 +14,8 @@ router.use('/likes', require('./likes'));
 // router.use('/forgot', require('./users'));
 router.use('/reset', require('./users'));
 // router.use('/reset', require('./users'));
-router.use('/friends', require('./users'));
 
-
+router.use('/friends', require('./friendship'));
 
 router.use('/api', require('./api'));
 

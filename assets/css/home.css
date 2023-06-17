@@ -1,10 +1,139 @@
 #home-container {
-  display: flex; }
-  #home-container #feed-posts {
-    width: 70%;
-    padding: 10px; }
-  #home-container #user-friends {
-    width: 30%;
-    padding: 10px;
-    border-left: 1px solid lightgrey;
-    height: 100%; }
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Styling for the feed posts section */
+#feed-posts {
+  flex: 1;
+  margin-right: 20px;
+}
+
+
+
+/* Styling for the form inside the feed posts section */
+#new-post-form {
+  margin-bottom: 10px;
+}
+
+/* Styling for the posts list container */
+#posts-list-container {
+  list-style-type: none;
+  padding: 0;
+}
+
+/* Styling for each post */
+.post {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+/* Styling for the comments section */
+.comments-section {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+/* Styling for the users you may know section */
+#user-friends {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+/* Styling for the post form */
+#new-post-form textarea {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  resize: vertical;
+}
+
+#new-post-form input[type="submit"] {
+  margin-top: 5px;
+  padding: 12px 30px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 500;
+  /* font-size:medium;     */
+
+}
+
+#new-post-form input[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+.heading-posts {
+font-size: 28px;
+font-weight: bold;
+margin-bottom: 20px;
+color: #3b5998; /* Facebook Blue */
+text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+
+
+#user-friend,
+#all-users {
+  flex: 1;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+#user-friend h4,
+#all-users h4 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.friend-entry,
+.user-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.friend-name,
+.user-name {
+  flex: 1;
+}
+
+.friend-actions,
+.user-actions {
+  display: flex;
+  align-items: center;
+}
+
+.friend-actions a,
+.user-actions a {
+  margin-left: 10px;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 3px;
+}
+
+.friend-action-remove,
+.user-action-add {
+  display: inline-block;
+}
+
+.friend-action-remove:hover,
+.user-action-add:hover {
+  background-color: #0056b3;
+  cursor: pointer;
+}
+
+

@@ -46,7 +46,7 @@ module.exports.create = async function(req, res){
                     data: {
                         comment: comment
                     },
-                    message: "Post created!"
+                    message: "Comment Posted!"
                 });
             }
 
@@ -55,6 +55,7 @@ module.exports.create = async function(req, res){
 
             res.redirect('/');
         }
+        
     }catch(err){
         req.flash('error', err);
         return;

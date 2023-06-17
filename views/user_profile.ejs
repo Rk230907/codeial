@@ -1,81 +1,45 @@
-<link rel="stylesheet" href="/css/user_profile.css">
+<link rel="stylesheet" href="/css/user_profile.css" />
 
-<img src="<%= profile_user.avatar %>" alt="<%= profile_user.name %>" width="100">
+<div style="display: flex; justify-content: center; align-items: center; font-family: Arial, sans-serif;">
+<div class="profile">
+  <img src="<%= profile_user.avatar %>" alt="<%= profile_user.name %>" width="150"  />
 
-
-
-<% if(user.id == profile_user.id){ %>
+  <% if(user.id==profile_user.id){ %>
     <!-- if user matches then show the form -->
     <form action="/users/update/<%= profile_user.id %>" enctype="multipart/form-data" method="POST">
-        <input type="text" name="name" placeholder="Your Name" value="<%= profile_user.name %>" required>
-        <input type="email" name="email" placeholder="Your Email" value="<%= profile_user.email %>" required>
+      <input type="text" name="name" placeholder="Your Name" value="<%= profile_user.name %>" required />
+      <input type="email" name="email" placeholder="Your Email" value="<%= profile_user.email %>" required />
 
-        <input type="file" name="avatar" placeholder="Profile Picture">
-        <input type="submit"  value="Update">
+      <input type="file" name="avatar" placeholder="Profile Picture" />
+      <input type="submit" value="Update" />
     </form>
-    
-    
-<%}else{%>    
+
+    <div>
+      <p>
+          <a href='/'>
+              🏠Navigate Home
+          </a>
+      </p>
+  </div>
+
+
+  <% } else { %>
+    <h3 style="text-align: center;"> Contact Card </h3>
     <!-- else show only the profile info -->
-    <p><%= profile_user.name %></p>
-    <p><%= profile_user.email %></p>
-    <form id="addFriendForm" action="/friends/add" method="post">
-        <input type="hidden" name="friendId" value="<%= profile_user.id %>">
-        <input type="submit" value="Add Friend">
-    </form>
-
-    
-    <script>
-        // Get the form element
-        const addFriendForm = document.getElementById('addFriendForm');
-      
-        // Add event listener for form submission
-        addFriendForm.addEventListener('submit', function(event) {
-          event.preventDefault(); // Prevent default form submission
-      
-          // Create a new XMLHttpRequest object
-          const xhr = new XMLHttpRequest();
-      
-          // Configure the request
-          xhr.open('POST', addFriendForm.action);
-          xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      
-          // Handle the response
-          xhr.onload = function() {
-            if (xhr.status === 200) {
-              // Request was successful
-              const response = JSON.parse(xhr.responseText);
-              if (response.message) {
-                // Display success message
-                console.log(response.message);
-                new Noty({
-                        theme: 'relax',
-                        text: response.message,
-                        type: 'success',
-                        layout: 'topRight',
-                        timeout: 1500
-                        
-                    }).show();
-              }
-              // Optionally, you can update the UI or perform other actions based on the response
-            } else {
-              // Request failed
-              console.log('Error: ' + xhr.statusText);
-            }
-          };
-      
-          // Send the request
-          xhr.send(new URLSearchParams(new FormData(addFriendForm)));
-        });
-      </script>
-      
-      
-    
-    
-
-    <!-- <form action="/friends/remove" method="post">
-        <input type="text" name="friendId" value="<%= profile_user.id %>">
-        <input type="submit" value="Remove Friend">
-    </form> -->
-
-<%} %>
+    <p>
+      Name ---- <%= profile_user.name %>
+    </p>
+    <p>
+      Email-id ---- <%= profile_user.email %>
+    </p>
+   
+    <div>
+      <p>
+          <a href='/' style="text-decoration: none;">
+            🏠Navigate Home
+          </a>
+      </p>
+  </div>
+  <% } %>
+</div>
+</div>

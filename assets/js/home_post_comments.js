@@ -57,33 +57,58 @@ class PostComments{
     }
 
 
-    newCommentDom(comment){
-        // CHANGE :: show the count of zero likes on this comment
+newCommentDom(comment) {
+    // CHANGE :: show the count of zero likes on this comment
+    return $(`
+        <li id="comment-${comment._id}" class="comment-item">
+            <p>
+                <small>
+                    <a class="delete-comment-button" href="/comments/destroy/${comment._id}"><i class="fas fa-trash-alt"></i></a>
+                </small>
+                ${comment.content}
+                <br>
+                <small>
+                👤 Commentor - ${comment.user.name}
+                </small>
+                <br>
+                <br>
+                <small>
+                    <a class="toggle-like-button" data-likes="0" href="/likes/toggle/?id=${comment._id}&type=Comment">
+                        0 Likes
+                    </a>
+                </small>
+            </p>
+        </li>
 
-        return $(`<li id="comment-${ comment._id }">
-                        <p>
-                            
-                            <small>
-                                <a class="delete-comment-button" href="/comments/destroy/${comment._id}">X</a>
-                            </small>
-                            
-                            ${comment.content}
-                            <br>
-                            <small>
-                                ${comment.user.name}
-                            </small>
-                            <small>
-                            
-                                <a class="toggle-like-button" data-likes="0" href="/likes/toggle/?id=${comment._id}&type=Comment">
-                                    0 Likes
-                                </a>
-                            
-                            </small>
+        <style>
+        .comment-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+        }
+        
+        .delete-comment-button {
+            color: red;
+            text-decoration: none;
+            margin-right: 10px; /* Add spacing between content and delete button */
+        }
+        
+        .toggle-like-button {
+            color: blue;
+            text-decoration: none;
+            margin-left: 10px; /* Add spacing between content and like button */
+        }
+        
+        .toggle-like-button:hover {
+            text-decoration: underline;
+        }
+        </style>
+    `);
+}
 
-                        </p>    
 
-                </li>`);
-    }
+
 
 
     deleteComment(deleteLink){

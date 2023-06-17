@@ -15,11 +15,13 @@ const unlinkSync = promisify(fs.unlinkSync);
 
 // let's keep it same as before
 module.exports.profile = function(req, res) {
+  
     User.findById(req.params.id)
       .then(user => {
+    
         return res.render('user_profile', {
           title: 'User Profile',
-          profile_user: user
+          profile_user: user,
         });
       })
       .catch(err => {
@@ -152,34 +154,9 @@ module.exports.destroySession = function(req, res) {
       user.resetToken = token;
       user.resetTokenExpiration = Date.now() + 3600000; // 1 hour
       await user.save();
-  
-      // let transporter = nodemailer.createTransport({
-      //   service: 'gmail',
-      //   host: 'smtp.gmail.com',
-      //   port: 587,
-      //   secure: false,
-      //   auth:{
-      //       user: 'development.ypatel@gmail.com',
-      //       pass: 'pbbcvdbcaywhqfwp'
-      //   }
-      // });
-  
-      // transporter.sendMail({
-      //   from: 'development.ypatel@gmail.com',
-      //   to: user.email, 
-      //   subject: "Your password reset link",
-      //   text: `Click the following link to reset your password: http://localhost:8000/reset/password/${token}?email=${email}`
-      // }, (err, info) => {
-      //   if (err) {
-      //     console.log('Error in sending mail', err);
-      //     return;
-      //   }
-      //   console.log('Mail delivered', info);
-      //   return;
-      // });
 
       resetPwdMailer.resetPwd(user, token, email);
-  
+      
       res.render('user_sign_in', { success: 'Reset link sent to your email' , title: "Codeial | Sign In" });
     } catch (error) {
       console.log(error);
@@ -246,92 +223,7 @@ module.exports.destroySession = function(req, res) {
     res.render(filePath, { token, email , title: "Codeial | Reset Password"});
   };
 
-
-  module.exports.addFriend = async function (req, res) {
-    try {
-      const { friendId } = req.body;
-      const user = req.user;
-      const friend = await User.findById(friendId);
   
-      if (!friend) {
-        return res.status(404).json({ error: 'User not found' });
-      }
-  
-      const existingFriendship = await Friendship.findOne({
-        from_user: user._id,
-        to_user: friend._id,
-      });
-  
-      if (existingFriendship) {
-        // Remove the friendship
-        await existingFriendship.deleteOne();
-        // Update the friendships in both arrays
-        user.friendships.pull(existingFriendship);
-        friend.friendships.pull(existingFriendship);
-  
-        // Remove reverse friendship from the other user
-        const reverseFriendship = await Friendship.findOne({
-          from_user: friend._id,
-          to_user: user._id,
-        });
-        await reverseFriendship.deleteOne();
-        friend.friendships.pull(reverseFriendship);
-  
-        await user.save();
-        await friend.save();
-  
-        return res.status(200).json({ message: 'Unfriend Successful' });
-      }
-  
-      const newFriendship = new Friendship({
-        from_user: user._id,
-        to_user: friend._id,
-      });
-  
-      await newFriendship.save();
-  
-      // Update the friendships array for both users
-      user.friendships.push(newFriendship);
-      friend.friendships.push(newFriendship);
-  
-      // Add reverse friendship for the other user
-      const reverseFriendship = new Friendship({
-        from_user: friend._id,
-        to_user: user._id,
-      });
-      await reverseFriendship.save();
-      friend.friendships.push(reverseFriendship);
-  
-      await user.save();
-      await friend.save();
-      
-      return res.status(200).json({ message: 'Friendship created' });
-    } catch (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Internal server error' });
-    }
-  };
   
 
 
-// module.exports.removeFriend = async function(req, res){
-//   const {friendId} = req.body;
-//   const user = req.user;
-//   const friend = await User.findById(friendId);
-
-//   if(!friend){
-//     req.flash('error', 'User is not your friend');
-//     return res.redirect('back');
-//   }
-
-//   const existingFriendship = await Friendship.findOneAndDelete({
-//     from_user: user._id,
-//     to_user: friend._id
-//   });
-//   if(!existingFriendship){
-//     req.flash('error', 'Error occured while removing ass friend');
-//     return res.redirect('back');
-//   }
-
-
-// }

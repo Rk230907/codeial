@@ -1,0 +1,26 @@
+<link rel="stylesheet" href="/css/chat-box.css">
+
+
+<% if(locals.user){ %>
+    <div id="user-chat-box">
+        <h1 style="color: cadetblue;">
+            Codeial Chatroom
+        </h1>
+        <ul id="chat-messages-list">
+            <li class="other-messages">
+                <span>
+                    It's the users
+                </span>
+            </li>
+            <li class="self-message">
+                <span>
+                    It's You
+                </span>
+            </li>
+        </ul>
+        <div id="chat-message-input-container">
+            <input id="chat-message-input" placeholder="Type message here.....">
+            <button id="send-message">Send</button>
+        </div>
+    </div>
+<%}%>

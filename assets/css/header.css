@@ -1,26 +1,64 @@
 #layout-header nav {
   display: flex;
   justify-content: space-between;
-  padding: 0 10px;
-  background: #2196f3;
+  align-items: center;
+  padding: 10px;
+  background: linear-gradient(135deg, #00b0ff, #2979ff);
   color: white;
-  box-shadow: 1px 1px 1px 1px lightgrey;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#layout-header nav .mini-logo p {
+  margin: 5px;
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+#layout-header nav .auth-links {
+  display: flex;
   align-items: center;
 }
+
+#layout-header nav .auth-links ul {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  list-style: none;
+}
+
+#layout-header nav .auth-links ul li {
+  margin-right: 10px;
+}
+
+#layout-header nav .auth-links ul li:last-child {
+  margin-right: 0;
+}
+
+#layout-header nav a {
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+#layout-header nav a:hover {  
+  color: #cfd8dc;
+}
+
+#layout-header img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+@media screen and (max-width: 600px) {
   #layout-header nav .mini-logo p {
-    margin: 5px;
     font-size: 1.4rem;
-    font-weight: bold; }
-  #layout-header nav .auth-links ul {
-    margin: 5% 5px;
-    display: flex;
-    list-style: none; }
-    #layout-header nav .auth-links ul li {
-      margin-right: 10px; }
-  #layout-header nav a {
-    color: white;
-    text-decoration: none; }
-  #layout-header img{
-    width: 30px;
-    border-radius: 80px;
   }
+
+  #layout-header img {
+    width: 30px;
+    height: 30px;
+  }
+}

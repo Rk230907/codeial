@@ -39,48 +39,164 @@
 
 
     // method to create a post in DOM
-    let newPostDom = function(post){
-        // CHANGE :: show the count of zero likes on this post
-        return $(`<li id="post-${post._id}">
-                    <p>
-                        
-                        <small>
-                            <a class="delete-post-button"  href="/posts/destroy/${ post._id }">X</a>
-                        </small>
-                       
-                        ${ post.content }
-                        <br>
-                        <small>
-                        ${ post.user.name }
-                        </small>
-                        <br>
-                        <small>
-                            
-                                <a class="toggle-like-button" data-likes="0" href="/likes/toggle/?id=${post._id}&type=Post">
-                                    0 Likes
-                                </a>
-                            
-                        </small>
+// method to create a post in DOM
+// method to create a post in DOM
+let newPostDom = function(post) {
+    // CHANGE :: show the count of zero likes on this post
+    return $(`
+        <li id="post-${post._id}" class="post">
+            <p>
+                <small>
+                    <a class="delete-post-button" href="/posts/destroy/${post._id}"><i class="fas fa-trash-alt"></i></a>
+                </small>
+                ${post.content}<br>
+                <small style="margin-left: 20px;">👤 Creator - ${post.user.name}</small><br> <br>
+                <small>
+                    <a class="toggle-like-button" data-likes="0" href="/likes/toggle/?id=${post._id}&type=Post">
+                        0 Likes
+                    </a>
+                </small>
+            </p>
+            <div class="post-comments">
+                <form id="post-${post._id}-comments-form" action="/comments/create" method="POST">
+                    <input type="text" name="content" placeholder="Type Here to add comment..." required>
+                    <input type="hidden" name="post" value="${post._id}">
+                    <input type="submit" value="Add Comment">
+                </form>
+                <div class="post-comments-list">
+                    <ul id="post-comments-${post._id}"></ul>
+                </div>
+            </div>
+        </li>
+        <style>
+            /* CSS styles for the post */
+            .post {
+                margin-bottom: 10px;
+                padding: 10px;
+                border: 1px solid #ccc;
+            }
 
-                    </p>
-                    <div class="post-comments">
-                        
-                            <form id="post-${ post._id }-comments-form" action="/comments/create" method="POST">
-                                <input type="text" name="content" placeholder="Type Here to add comment..." required>
-                                <input type="hidden" name="post" value="${ post._id }" >
-                                <input type="submit" value="Add Comment">
-                            </form>
-               
+            .delete-post-button {
+                padding: 4px;
+                border: none;
+                background-color: transparent;
+                cursor: pointer;
+            }
+
+            /* Additional CSS styles for an extraordinary look */
+            #post-${post._id} {
+                background-color: #f9f9f9;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                margin-bottom: 10px;
+                /* Add your own custom styles here */
+            }
+
+            #post-${post._id} p {
+                margin: 0;
+                padding-bottom: 10px;
+                /* Add your own custom styles here */
+            }
+
+            #post-${post._id} small {
+                font-size: 12px;
+                color: #888;
+                /* Add your own custom styles here */
+            }
+
+            #post-${post._id} a.delete-post-button {
+                color: #f00;
+                text-decoration: none;
+                font-size: 12px;
                 
-                        <div class="post-comments-list">
-                            <ul id="post-comments-${ post._id }">
-                                
-                            </ul>
-                        </div>
-                    </div>
-                    
-                </li>`)
-    }
+                /* Add your own custom styles here */
+            }
+
+            #post-${post._id} a.toggle-like-button {
+                color: #00f;
+                text-decoration: none;
+                font-size: 12px;
+                margin-left: 10px; /* Add spacing between content and like button */
+                /* Add your own custom styles here */
+            }
+
+            #post-${post._id} .post-comments {
+                margin-top: 10px;
+                /* Add your own custom styles here */
+            }
+
+            #post-${post._id} form {
+                margin-bottom: 10px;
+                /* Add your own custom styles here */
+            }
+
+            #post-${post._id} form input[type="text"],
+            #post-${post._id} form input[type="submit"] {
+                margin-bottom: 10px; /* Add space between the input elements */
+            }
+
+            #post-${post._id} input[type="text"] {
+                width: 100%;
+                padding: 8px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                font-size: 14px;
+                /* Add your own custom styles here */
+            }
+
+            #post-${post._id} input[type="submit"] {
+                background-color: #4caf50;
+                color: #fff;
+                border: none;
+                padding: 8px 16px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 14px;
+                /* Add your own custom styles here */
+            }
+
+            #post-${post._id} .post-comments-list {
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+                /* Add your own custom styles here */
+            }
+
+            #post-${post._id} .comment-item {
+                margin-bottom: 10px;
+                /* Add your own custom styles here */
+            }
+
+            /* Additional styling for the like and delete buttons */
+            #post-${post._id} .toggle-like-button {
+                /* Add your own custom styles here */
+                /* Example: Change the appearance of the like button */
+                padding: 4px 8px;
+                border: 1px solid #00f;
+                border-radius: 3px;
+                background-color: #fff;
+                transition: background-color 0.3s ease;
+            }
+
+            #post-${post._id} .toggle-like-button:hover {
+                background-color: #00f;
+                color: #fff;
+            }
+
+            #post-${post._id} .delete-post-button {
+                /* Add your own custom styles here */
+                /* Example: Add Font Awesome icon to the delete button */
+                padding: 4px;
+                border: none;
+                background-color: transparent;
+                cursor: pointer;
+            }
+        </style>
+    `);
+}
+
+
 
 
     // method to delete a post from DOM
