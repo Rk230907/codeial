@@ -1,112 +1,71 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+
 <link rel="stylesheet" href="/css/home.css">
 
-<style>
-    /* Styling for the home container */
-    #home-container {
-        display: flex;
-        justify-content: space-between;
-    }
-
-    /* Styling for the feed posts section */
-    #feed-posts {
-        flex: 1;
-        margin-right: 20px;
-    }
-
-    /* Styling for the user friends section */
-    #user-friends {
-        flex: 0.5;
-    }
-
-    /* Styling for the form inside the feed posts section */
-    #new-post-form {
-        margin-bottom: 10px;
-    }
-
-    /* Styling for the posts list container */
-    #posts-list-container {
-        list-style-type: none;
-        padding: 0;
-    }
-
-    /* Styling for each post */
-    .post {
-        margin-bottom: 10px;
-        padding: 10px;
-        border: 1px solid #ccc;
-    }
-
-    /* Styling for the comments section */
-    .comments-section {
-        margin-top: 10px;
-        padding: 10px;
-        border: 1px solid #ccc;
-    }
-
-    /* Styling for the users you may know section */
-    #user-friends {
-        margin-top: 10px;
-        padding: 10px;
-        border: 1px solid #ccc;
-    }
-
-    /* Styling for the post form */
-    #new-post-form textarea {
-        width: 100%;
-        padding: 5px;
-        border: 1px solid #ccc;
-        resize: vertical;
-    }
-
-    #new-post-form input[type="submit"] {
-        margin-top: 5px;
-        padding: 12px 30px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        cursor: pointer;
-        border-radius: 10px;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        font-weight: 500;
-        /* font-size:medium;     */
-
-    }
-
-    #new-post-form input[type="submit"]:hover {
-        background-color: #45a049;
-    }
-</style>
 
 <div id="home-container">
     <section id="feed-posts">
-        <h4>Posts</h4>
+        <h4 class="heading-posts">
+            <i style="margin-left: 15px;" class="far fa-comments"></i> Posts
+          </h4>
         <% if(locals.user){ %>
-        <form action="/posts/create" id="new-post-form" method="POST">
-            <textarea name="content" cols="30" rows="3" placeholder="Type Here..." required></textarea>
-            <input type="submit" value="Post">
-        </form>
-        <% } %>
+            <form action="/posts/create" id="new-post-form" method="POST">
+                <textarea style="margin-left: 15px;" name="content" cols="30" rows="3" placeholder="Type Here..." required></textarea>
+                <input style="margin-left: 15px;" type="submit" value="Post">
+            </form>
+            <% } %>
 
-        <div id="posts-list-container">
-            <ul>
-                <% for(post of posts){ %>
+                <div id="posts-list-container">
+                    <ul>
+                        <% for(post of posts){ %>
 
-                <%- include('_post') -%>
+                            <%- include('_post') -%>
 
-                <%} %>
-            </ul>
-        </div>
+                                <%} %>
+                    </ul>
+                </div>
     </section>
 
 
-    <section id="user-friends">
-        <h4>Users you may know!!</h4>
-        <% for(u of all_users){%>
-        <p>
-            <a href="/users/profile/<%= u.id %>"><%= u.name %></a>
-        </p>
+    <div style="margin-right: 10px;" id="user-friends-container">
+        <% if(locals.user){ %>
+          <section id="user-friend">
+            <h4>Friends</h4>
+            <% for(let f of friends){ %>
+              <div class="friend-entry">
+                <div class="friend-name">
+                  
+                <%= f.to_user.name %>
+                  
+                </div>
+                <div class="friend-actions">
+                  <a href="/friends/destroy/?toUser=<%= f.to_user.id %>">
+                    <span class="friend-action-remove">Remove</span>
+                  </a>
+                </div>
+              </div>
+            <% } %>
+          </section>
         <% } %>
-    </section>
+      
+        <section id="all-users">
+          <h4>Users you may know!! or Not??</h4>
+          <% for(u of all_users){ %>
+            <div class="user-entry">
+              <div class="user-name">
+                <a href="users/profile/<%= u.id %>" style="text-decoration: none;"> <%= u.name %></a>
+              </div>
+              <% if(locals.user && locals.user.id != u.id) { %>
+                <div class="user-actions">
+                  <a href="/friends/create/?toUser=<%= u.id %>">
+                    <span class="user-action-add">Add</span>
+                  </a>
+                </div>
+              <% } %>
+            </div>
+          <% } %>
+        </section>
+
     <%- include('_chat_box') -%>
 </div>
 
@@ -117,7 +76,7 @@
 <!-- import the script files for toggle likes, also run it over for the already present posts and comments on the page -->
 <script src="js/toggle_likes.js"></script>
 <script>
-    $('.toggle-like-button').each(function(){
+    $('.toggle-like-button').each(function () {
         let self = this;
         let toggleLike = new ToggleLike(self);
     });
@@ -126,7 +85,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
 <script src="/js/chat_engine.js"></script>
 <% if(locals.user){ %>
-<script>
-    new ChatEngine('user-chat-box', '<%= locals.user.email %>');
-</script>
-<%}%>
+    <script>
+        new ChatEngine('user-chat-box', '<%= locals.user.email %>');
+    </script>
+    <%}%>

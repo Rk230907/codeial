@@ -1,82 +1,5 @@
 <link rel="stylesheet" href="/css/user_profile.css" />
 
-<style>
-  /* Center the profile section */
-  /* body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #f2f2f2;
-    font-family: Arial, sans-serif;
-  } */
-
-  .profile {
-    text-align: center;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    max-width: 400px;
-    margin-top: 100px;
-  }
-
-  /* Animation effects */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
-  /* Apply animation to the profile section */
-  .profile {
-    animation: fadeIn 0.5s ease;
-  }
-
-  /* Add some spacing and style to form elements */
-  form {
-    margin-top: 10px;
-  }
-
-  input[type="text"],
-  input[type="email"],
-  input[type="file"],
-  input[type="submit"] {
-    display: block;
-    width: 100%;
-    margin-bottom: 10px;
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-  }
-
-  input[type="submit"] {
-    background-color: #4caf50;
-    color: #fff;
-    cursor: pointer;
-  }
-
-  ul {
-    margin-top: 10px;
-    padding-left: 20px;
-  }
-
-  li {
-    margin-bottom: 5px;
-  }
-
-  /* Style the success message */
-  .noty_body {
-    background-color: #4caf50 !important;
-    color: #fff !important;
-    padding: 10px !important;
-    border-radius: 5px !important;
-  }
-</style>
 <div style="display: flex; justify-content: center; align-items: center; font-family: Arial, sans-serif;">
 <div class="profile">
   <img src="<%= profile_user.avatar %>" alt="<%= profile_user.name %>" width="150"  />
@@ -91,85 +14,32 @@
       <input type="submit" value="Update" />
     </form>
 
-    <ul>
-      <h3 style="text-align: left;">
-        😀 Friends
-      </h3>
-      <% user.friendships.forEach(function (friendship) { %>
-        <li style="text-align: left;"> 😊 <%= friendship %></li>
-      <% }) %>
-    </ul>
+    <div>
+      <p>
+          <a href='/'>
+              🏠Navigate Home
+          </a>
+      </p>
+  </div>
+
+
   <% } else { %>
+    <h3 style="text-align: center;"> Contact Card </h3>
     <!-- else show only the profile info -->
     <p>
-      <%= profile_user.name %>
+      Name ---- <%= profile_user.name %>
     </p>
     <p>
-      <%= profile_user.email %>
+      Email-id ---- <%= profile_user.email %>
     </p>
-    <% if (user.friendships.includes(profile_user.id)) { %>
-      <form id="addFriendForm" action="/friends/add" method="post">
-        <input type="hidden" name="friendId" value="<%= profile_user.id %>" />
-        <input type="submit" value="Remove Friend" />
-      </form>
-    <% } else { %>
-      <form id="addFriendForm" action="/friends/add" method="post">
-        <input type="hidden" name="friendId" value="<%= profile_user.id %>" />
-        <input type="submit" value="Add Friend" />
-      </form>
-    <% } %>
-
-    <script>
-      // Get the form element
-      const addFriendForm = document.getElementById("addFriendForm");
-
-      // Add event listener for form submission
-      addFriendForm.addEventListener("submit", function (event) {
-        event.preventDefault(); // Prevent default form submission
-
-        // Create a new XMLHttpRequest object
-        const xhr = new XMLHttpRequest();
-
-        // Configure the request
-        xhr.open("POST", addFriendForm.action);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-        // Handle the response
-        xhr.onload = function () {
-          if (xhr.status === 200) {
-            // Request was successful
-            const response = JSON.parse(xhr.responseText);
-            if (response.message) {
-              // Display success message
-              new Noty({
-                theme: "relax",
-                text: response.message,
-                type: "success",
-                layout: "topRight",
-                timeout: 1500,
-              }).show();
-            }
-
-            // Update the submit button value based on the response
-            const submitButton = addFriendForm.querySelector('input[type="submit"]')
-
-            if (response.isFriend) {
-              submitButton.value = 'Remove Friend';
-            } else {
-              submitButton.value = 'Add Friend';
-            }
-
-            // Optionally, you can update the UI or perform other actions based on the response
-          } else {
-            // Request failed
-            console.log("Error: " + xhr.statusText);
-          }
-        };
-
-        // Send the request
-        xhr.send(new URLSearchParams(new FormData(addFriendForm)));
-      });
-    </script>
+   
+    <div>
+      <p>
+          <a href='/' style="text-decoration: none;">
+            🏠Navigate Home
+          </a>
+      </p>
+  </div>
   <% } %>
 </div>
 </div>
