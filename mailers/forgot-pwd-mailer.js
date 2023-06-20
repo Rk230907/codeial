@@ -1,7 +1,7 @@
 const nodemailer = require('../config/forgot-pwd-nodemailer');
 
 exports.resetPwd = (user, token, email)=> {
-    console.log('Email sent to - ', email);
+    // console.log('Email sent to - ', email);
 
     nodemailer.transporter.sendMail({
         from: 'development.ypatel@gmail.com',
@@ -13,7 +13,7 @@ exports.resetPwd = (user, token, email)=> {
           console.log('Error in sending mail', err);
           return;
         }
-        console.log('Mail delivered', info);
+        // console.log('Mail delivered', info);
         return;
       });
   

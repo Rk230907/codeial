@@ -25,7 +25,7 @@ module.exports.create = async (req, res)=>{
 
             user.save();
             user2.save();
-            console.log(user.friendships)
+            // console.log(user.friendships)
             
             req.flash('success',"added to friends...");
         }else{

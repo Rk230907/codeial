@@ -11,6 +11,7 @@ const app = express();
 
 
 const port = 8000;
+// const PORT = Process.env
 const expressLayouts = require('express-ejs-layouts');
 const db = require('./config/mongoose');
 // used for session cookie
@@ -23,6 +24,15 @@ const passportGoogle = require('./config/passport-google-oauth2-strategy');
 // Setup the chat Server to be used with socket.io
 const chatServer = require('http').Server(app);
 const chatSockets = require('./config/chat_sockets').chatSockets(chatServer);
+
+const env = require('./environment');
+const logger = require('morgan');
+
+app.use(logger(env.morgan.mode, env.morgan.options));
+
+require('./config/view-helper')(app);
+
+const path = require('path');
 
 
 
@@ -70,7 +80,7 @@ app.set('views', './views');
 app.use(session({
     name: 'codeial',
     // TODO change the secret before deployment in production mode
-    secret: 'blahsomething',
+    secret: env.session_cookie_key,
     saveUninitialized: false,
     resave: false,
     cookie: {
@@ -78,7 +88,7 @@ app.use(session({
     },
     store: MongoStore.create(
         {
-            mongoUrl: 'mongodb://127.0.0.1:27017/codeial-development',
+            mongoUrl: `mongodb://127.0.0.1:27017/${env.db}`,
             autoRemove: 'disabled'
         
         },
