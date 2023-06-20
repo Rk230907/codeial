@@ -30,11 +30,11 @@ module.exports.create = async function(req, res){
             // Using queue send emails. 
             let job = queue.create('emails', comment).save(function(err){
                 if(err){
-                    console.log('Error in creating a queue');
+                    // console.log('Error in creating a queue');S
                     return;
                 }
   
-                console.log('Job enqueued',job.id);
+                // console.log('Job enqueued',job.id);
 
             });  
             

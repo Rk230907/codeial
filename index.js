@@ -26,6 +26,11 @@ const chatServer = require('http').Server(app);
 const chatSockets = require('./config/chat_sockets').chatSockets(chatServer);
 
 const env = require('./config/environment');
+const logger = require('morgan');
+
+app.use(logger(env.morgan.mode, env.morgan.options));
+
+require('./config/view-helper')(app);
 
 const path = require('path');
 

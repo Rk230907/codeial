@@ -2,7 +2,7 @@ const nodemailer = require('../config/nodemailer');
 
 //Other way to write module.exports
 exports.newPost = (post)=> {
-    console.log('Inside new post mailer', post);
+    // console.log('Inside new post mailer', post);
 
     let htmlString = nodemailer.renderTemplate({post: post}, '/posts/new_post.ejs')
 
@@ -16,7 +16,7 @@ exports.newPost = (post)=> {
             console.log('Error in sending mail', err);
             return;
         }
-        console.log('Mail delivered', info);
+        // console.log('Mail delivered', info);
         return;
     });
 }

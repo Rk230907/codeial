@@ -2,7 +2,7 @@ const nodemailer = require('../config/nodemailer');
 
 //Other way to write module.exports
 exports.newComment = (comment)=> {
-    console.log('Inside new comment mailer', comment);
+    // console.log('Inside new comment mailer', comment);
 
     let htmlString = nodemailer.renderTemplate({comment: comment}, '/comments/new_comment.ejs')
 
@@ -17,7 +17,7 @@ exports.newComment = (comment)=> {
             return;
         }
 
-        console.log('Mail delivered', info);
+        // console.log('Mail delivered', info);
         return;
     });
 }

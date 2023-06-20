@@ -136,7 +136,7 @@ module.exports.destroySession = function(req, res) {
   
 
   module.exports.forgotPwd = async (req, res) => {
-    console.log('Sending mail');
+    // console.log('Sending mail');
     const { email } = req.body;
   
     try {
@@ -150,7 +150,7 @@ module.exports.destroySession = function(req, res) {
       }
   
       const token = generateToken();
-      console.log(token);
+      // console.log(token);
       user.resetToken = token;
       user.resetTokenExpiration = Date.now() + 3600000; // 1 hour
       await user.save();
