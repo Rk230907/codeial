@@ -1,7 +1,7 @@
 
 const User = require('../../../models/user');
 const jwt = require('jsonwebtoken');
-const env = require('../../../environment');
+const env = require('../../../.env');
 
 module.exports.createSession = async function(req, res){
 
