@@ -4,7 +4,7 @@ const rfs = require('rotating-file-stream').createStream;
 const path = require('path');
 const { log } = require('console');
 
-const logDirectory=path.join(__dirname, '../production_logs');
+const logDirectory=path.join(__dirname, '/production_logs');
 
 fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
 

@@ -1,4 +1,4 @@
-const env = require('./environment');
+const env = require('../environment');
 const fs = require('fs');
 const path = require('path');
 
