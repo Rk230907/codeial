@@ -24,19 +24,19 @@ module.exports.create = async function(req, res){
 
 
             //Initiate Email without queue.  
-            // commentsMailer.newComment(comment);
+            commentsMailer.newComment(comment);
 
 
             // Using queue send emails. 
-            let job = queue.create('emails', comment).save(function(err){
-                if(err){
-                    // console.log('Error in creating a queue');S
-                    return;
-                }
+            // let job = queue.create('emails', comment).save(function(err){
+            //     if(err){
+            //         // console.log('Error in creating a queue');S
+            //         return;
+            //     }
   
-                // console.log('Job enqueued',job.id);
+            //     // console.log('Job enqueued',job.id);
 
-            });  
+            // });  
             
             if (req.xhr){
                 // Similar for comments to fetch the user's id!
