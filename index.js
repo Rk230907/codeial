@@ -36,13 +36,9 @@ const path = require('path');
 
 
 
-const PORT = process.env.PORT || 5002;
-
-chatServer.listen(PORT, () => {
-  console.log(`Chat Server is listening on port ${port}`);
+chatServer.listen(5001, ()=>{
+    console.log('Chat Server is listening on port 5000');
 });
-
-  
 
 
 
